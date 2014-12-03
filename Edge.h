@@ -7,20 +7,90 @@ class Mesh;
 
 class Edge {
 public:
-	Edge(const Vector3d& vertex, Edge * a0 = nullptr, Edge * a1 = nullptr, Edge * a2 = nullptr);
+	/**
+	 * Default constructor
+     */
+	Edge();
+	
+	/**
+	 * Copy constructor defaulted because we need the pointers, not the pointed data.
+     * @param o : The Edge about to be copied
+     */
+	Edge(const Edge& o) = default;
+	
+	/**
+	 * Construct an Edge
+     * @param vertex : The vertex associated to the edge
+     * @param a0 : A pointer to the next Edge
+     * @param a1 : A pointer to the previous Edge
+     * @param a2 : A pointer to the opposite Edge
+     */
+	Edge(const Vector3d& vertex, Edge * a0, Edge * a1, Edge * a2);
+	
+	/**
+	 * Move constructor deleted because it is nonsense
+     * @param o : Edge to be moved
+     */
+	Edge(Edge&& o) = delete;
+	
+	/**
+	 * Destroy an Edge without freeing neighbor pointers
+     */
 	~Edge();
 
-	Edge * alpha0() const;	// next
-	Edge * alpha1() const;	// prev
-	Edge * alpha2() const;	// opposite
+	/**
+	 * Assignation operator
+     * @param o
+     * @return *this
+     */
+	Edge& operator=(const Edge& o);
+	
+	/**
+	 * This method returns the next Edge
+     * @return the next Edge
+     */
+	Edge * alpha0() const;
+	
+	/**
+	 * This method returns the previous Edge
+     * @return the previous Edge
+     */
+	Edge * alpha1() const;
+	
+	/**
+	 * This method returns the opposite Edge
+     * @return the opposite Edge
+     */
+	Edge * alpha2() const;
 	
 	friend Mesh;
 private:
+	/**
+	 * Connects the current Edge to the next Edge
+     * @param a0 the next Edge
+     */
 	void connectTo0(Edge * a0);
+	
+	/**
+	 * Connects the current Edge to the previous Edge
+     * @param a1 the previous Edge
+     */
 	void connectTo1(Edge * a1);
+	
+	/**
+	 * Connects the current Edge to the opposite Edge
+     * @param a2 the opposite Edge
+     */
 	void connectTo2(Edge * a2);
 	
+	/**
+	 * This is the list of vertices in the mesh
+	 */
 	Vector3d m_vertex;
+	
+	/**
+	 * This is the three neighbors of the current Edge
+	 */
 	Edge * m_neighbor[3];
 };
 
@@ -29,8 +99,6 @@ struct Triangle{
 	Edge * e2;
 	Edge * e3;
 };
-
-bool operator==(const Triangle& t2, const Triangle& t411);
 
 typedef Edge MeshData;
 

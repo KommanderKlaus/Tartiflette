@@ -28,6 +28,16 @@ struct Triangle{
 	Edge * e1;
 	Edge * e2;
 	Edge * e3;
+	Triangle () {
+		e1= nullptr;
+		e2= nullptr;
+		e3= nullptr;
+	};
+	Triangle (const Triangle &tr) {
+		e1 = tr.e1;
+		e2 = tr.e2;
+		e3 = tr.e3;
+	};
 };
 
 bool operator==(const Triangle& t2, const Triangle& t411);

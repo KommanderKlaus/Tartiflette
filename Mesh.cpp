@@ -66,8 +66,10 @@ int Mesh::load(const std::string& filename){
 				
 				// Lier les triangles entre eux
 				for(int i = 0 ; i<curTriIndex; ++i){
-					Triangle  curTri = m_tri[curTriIndex];
-					Triangle  oldTri = m_tri[i];
+					Triangle  curTri (m_tri[curTriIndex]); // false
+					Triangle  oldTri  (m_tri[i]); //(false
+					std::cout << "pouet" <<std::endl;
+					std::cout<< (curTri.e1)->m_vertex.x <<std::endl;
 					// test de correspondance des sommets
 					if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
 						if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){

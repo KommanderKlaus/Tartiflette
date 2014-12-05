@@ -30,7 +30,7 @@ struct Vector3d {
 	/**
 	 * Destructor
      */
-	~Vector() = default;
+	~Vector3d() = default;
 	
 	/**
 	 * Assignation operator

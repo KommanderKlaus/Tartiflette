@@ -1,3 +1,4 @@
+#include <string.h> // memcpy, memset
 #include "Edge.h"
 #include <fstream>
 #include <vector>
@@ -14,6 +15,11 @@ m_vertex(vertex)
 	m_neighbor[0] = a0;
 	m_neighbor[1] = a1;
 	m_neighbor[2] = a2;
+}
+
+Edge::Edge(const Vector3d& vertex):
+m_vertex(vertex){
+	memset(m_neighbor, 0, sizeof(m_neighbor));
 }
 
 Edge::~Edge() {

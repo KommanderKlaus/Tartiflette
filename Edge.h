@@ -19,6 +19,12 @@ public:
 	Edge(const Edge& o) = default;
 	
 	/**
+	 * Construct a single Edge with a vertex
+     * @param vertex
+     */
+	Edge(const Vector3d& vertex);
+	
+	/**
 	 * Construct an Edge
      * @param vertex : The vertex associated to the edge
      * @param a0 : A pointer to the next Edge

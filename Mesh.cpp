@@ -2,21 +2,19 @@
 #include <fstream>
 #include <list>
 #include <vector>
+#include "Mesh.h"	
 
-#include "Mesh.h"
-
-#define CORRESP(i) \
-if(curTri.e##i->m_vertex == oldTri.e##i->m_vertex){\
-	if(curTri.e##i->alpha0() == oldTri.e##i->alpha1()){\
-		curTri.e##i->connectTo2(oldTri.e##i);\
-		oldTri.e##i->connectTo2(curTri.e##i);\
-	}\
-}\
-					
-Mesh::Mesh():m_data(nullptr) {
+Mesh::Mesh():m_nbf(0), m_data(nullptr) {
+}
+Mesh::~Mesh() {
 }
 
-Mesh::~Mesh() {
+int Mesh::euler() {
+  return vertexBuf.size() - m_nbEdge + m_nbf;
+}
+
+int Mesh::genre() {
+  return 1 - (this->euler() + 1)/2;// 1 - (euler + nb composante_connexe (ici 1) + 0 (surface orientable))/2
 }
 
 int Mesh::load(const std::string& filename){
@@ -25,7 +23,7 @@ int Mesh::load(const std::string& filename){
 		return 1;
 	}
 	
-	std::vector<Vector3d> vertexBuf;
+	//std::vector<Vector3d> vertexBuf;
 	
 	std::string line;
 	std::string head(2, '\0');
@@ -43,7 +41,7 @@ int Mesh::load(const std::string& filename){
 				// f 1 5 4
 				sscanf(line.data(), "%s %d %d %d",const_cast<char*>(head.data()), &s1, &s2, &s3);
 				vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
-				
+				++m_nbf;
 				// Génération d'un triangle
 				Triangle tri;
 				tri.e1 = new Edge(vertexBuf[s1-1]);
@@ -54,19 +52,12 @@ int Mesh::load(const std::string& filename){
 				tri.e1->connectTo0(tri.e2);
 				tri.e2->connectTo0(tri.e3);
 				tri.e3->connectTo0(tri.e1);
-				tri.e1->connectTo1(tri.e3);
-				tri.e2->connectTo1(tri.e1);
-				tri.e3->connectTo1(tri.e2);
-//				tri.e1->connectTo2(tri.e1);
-//				tri.e2->connectTo2(tri.e2);
-//				tri.e3->connectTo2(tri.e3);
 				m_tri.push_back(tri);
 				++curTriIndex;
-				// pamela a de gros seins
 				// Lier les triangles entre eux
 				for(int i = 0 ; i<curTriIndex; ++i){
 					Triangle  curTri (m_tri[curTriIndex]);
-					Triangle  oldTri  (m_tri[i]);//bite 
+					Triangle  oldTri  (m_tri[i]); 
 					// test de correspondance des sommets
 					if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
 						if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
@@ -93,6 +84,7 @@ int Mesh::load(const std::string& filename){
 		}
 	}
 	ifs.close();
-	return 0;
+	m_nbEdge = vertexBuf.size()*1.5;
+    return 0;
 }
 

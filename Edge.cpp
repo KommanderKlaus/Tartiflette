@@ -28,6 +28,7 @@ Edge::~Edge() {
 Edge& Edge::operator=(const Edge& o) {
 	this->m_vertex = o.m_vertex;
 	memcpy(m_neighbor, o.m_neighbor, sizeof(m_neighbor));
+    return *this;
 }
 
 

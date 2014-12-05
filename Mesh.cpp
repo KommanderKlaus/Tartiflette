@@ -31,18 +31,17 @@ int Mesh::load(const std::string& filename){
 	std::string head(2, '\0');
 	float x, y, z;
 	int s1, s2, s3;
-	int curTriIndex = 0;
+	int curTriIndex = -1;
 	
 	while(getline(ifs, line)){
 		if(line[0] != '#' && line[0] != 'o' && line[0] != 's'){
 			if(line[0] == 'v'){
 				// v 0.5 4.7 8.5
-				sscanf(line.data(), "%s %f %f %f", head.data(), &x, &y, &z);
-				std::cout << head.data() << std::endl;
+				sscanf(line.data(), "%s %f %f %f",const_cast<char*>(head.data()), &x, &y, &z);
 				vertexBuf.emplace(vertexBuf.end(), x, y, z);
 			}else if(line[0] == 'f'){
 				// f 1 5 4
-				sscanf(line.data(), "%s %d %d %d", head.data(), &s1, &s2, &s3);
+				sscanf(line.data(), "%s %d %d %d",const_cast<char*>(head.data()), &s1, &s2, &s3);
 				vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
 				
 				// Génération d'un triangle
@@ -63,13 +62,11 @@ int Mesh::load(const std::string& filename){
 //				tri.e3->connectTo2(tri.e3);
 				m_tri.push_back(tri);
 				++curTriIndex;
-				
+				// pamela a de gros seins
 				// Lier les triangles entre eux
 				for(int i = 0 ; i<curTriIndex; ++i){
-					Triangle  curTri (m_tri[curTriIndex]); // false
-					Triangle  oldTri  (m_tri[i]); //(false
-					std::cout << "pouet" <<std::endl;
-					std::cout<< (curTri.e1)->m_vertex.x <<std::endl;
+					Triangle  curTri (m_tri[curTriIndex]);
+					Triangle  oldTri  (m_tri[i]);//bite 
 					// test de correspondance des sommets
 					if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
 						if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
@@ -99,9 +96,3 @@ int Mesh::load(const std::string& filename){
 	return 0;
 }
 
-Edge* Mesh::find(const Vector3d& v) {
-//	while(){
-//	}
-}
-
-std::ostream& operator<<(std::ostream& os, const Mesh& m);

@@ -12,6 +12,7 @@ Vector3d& Vector3d::operator=(const Vector3d& o) {
 	this->x = o.x;
 	this->y = o.y;
 	this->z = o.z;
+    return *this;
 }
 
 bool operator==(const Vector3d& a, const Vector3d& b){

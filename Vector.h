@@ -38,7 +38,10 @@ struct Vector3d {
      * @return 
      */
 	Vector3d& operator=(const Vector3d& o);
-	
+    
+    float getx () const;
+    float gety () const;
+    float getz () const;
 	/**
 	 * Coordinates of the 3d vector
 	 */

@@ -22,9 +22,6 @@ m_vertex(vertex){
 	memset(m_neighbor, 0, sizeof(m_neighbor));
 }
 
-Edge::~Edge() {
-}
-
 Edge& Edge::operator=(const Edge& o) {
 	this->m_vertex = o.m_vertex;
 	memcpy(m_neighbor, o.m_neighbor, sizeof(m_neighbor));
@@ -57,4 +54,47 @@ void Edge::connectTo1(Edge* a1) {
 void Edge::connectTo2(Edge* a2) {
 	this->m_neighbor[2] = a2;// Opposite of *this set to a0
 	a2->  m_neighbor[2] = this;	// Opposite of a0 set to *this
+}
+
+Triangle::Triangle():
+e1(nullptr),
+e2(nullptr),
+e3(nullptr)
+{}
+
+Triangle::Triangle(Edge* _e1, Edge* _e2, Edge* _e3):
+e1(_e1),
+e2(_e2),
+e3(_e3){
+	e1->connectTo0(e2);
+	e2->connectTo0(e3);
+	e3->connectTo0(e1);
+}
+
+Triangle::Triangle(const Triangle& tr):
+e1(tr.e1),
+e2(tr.e2),
+e3(tr.e3)
+{}
+
+Triangle::Triangle (Triangle&& tr):
+e1(std::move(tr.e1)),
+e2(std::move(tr.e2)),
+e3(std::move(tr.e3)){
+	tr.e1 = nullptr;
+	tr.e2 = nullptr;
+	tr.e3 = nullptr;
+}
+
+Triangle::~Triangle() {
+	delete e1;
+	delete e2;
+	delete e3;
+}
+
+Triangle& Triangle::operator=(const Triangle& o) {
+	this->e1 = o.e1;
+	this->e2 = o.e2;
+	this->e1 = o.e3;
+	return *this;
 }

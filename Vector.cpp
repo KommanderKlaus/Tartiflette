@@ -15,6 +15,15 @@ Vector3d& Vector3d::operator=(const Vector3d& o) {
     return *this;
 }
 
+float Vector3d::getx() const {
+    return x;
+}
+float Vector3d::gety() const {
+   return y;
+}
+float Vector3d::getz() const {
+  return z;
+}
 bool operator==(const Vector3d& a, const Vector3d& b){
 	return a.x == b.x && a.y == b.y && a.z == b.z;
 }

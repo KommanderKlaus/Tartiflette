@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 
+class Triangle;
 class Mesh;
 
 class Edge {
@@ -42,7 +43,7 @@ public:
 	/**
 	 * Destroy an Edge without freeing neighbor pointers
      */
-	~Edge();
+	~Edge() = default;
 
 	/**
 	 * Assignation operator
@@ -69,7 +70,15 @@ public:
      */
 	Edge * alpha2() const;
 	
+    /**
+     * This method return vertices bind
+     * to an Edge
+     * **/
+     Vector3d getVertex() const {
+         return m_vertex;
+     }
 	friend Mesh;
+	friend Triangle;
 private:
 	/**
 	 * Connects the current Edge to the next Edge
@@ -90,7 +99,7 @@ private:
 	void connectTo2(Edge * a2);
 	
 	/**
-	 * This is the list of vertices in the mesh
+	 * This is the vertex associated to the edge
 	 */
 	Vector3d m_vertex;
 	
@@ -104,16 +113,12 @@ struct Triangle{
 	Edge * e1;
 	Edge * e2;
 	Edge * e3;
-	Triangle () {
-		e1= nullptr;
-		e2= nullptr;
-		e3= nullptr;
-	};
-	Triangle (const Triangle &tr) {
-		e1 = tr.e1;
-		e2 = tr.e2;
-		e3 = tr.e3;
-	};
+	Triangle ();
+	Triangle (Edge * _e1, Edge * _e2, Edge * _e3);
+	Triangle (const Triangle &tr);
+	Triangle (Triangle&& tr);
+	~Triangle();
+	Triangle& operator=(const Triangle& o);
 };
 
 typedef Edge MeshData;

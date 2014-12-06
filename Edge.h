@@ -1,6 +1,5 @@
 #ifndef EDGE_H
 #define	EDGE_H
-
 #include "Vector.h"
 
 class Mesh;
@@ -73,9 +72,9 @@ public:
      * This method return vertices bind
      * to an Edge
      * **/
-     Vector3d getVertex() const {
-         return m_vertex;
-     }
+inline Vector3d getVertex() const {
+      return this->m_vertex;
+}
 	friend Mesh;
 private:
 	/**

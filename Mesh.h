@@ -16,19 +16,16 @@ public:
     int genre();
 	int euler();
 	int load(const std::string& filename);
-	
+    void printstructure(const std::string& filename);	
 	int getNbVertices();
 	int getNbEdges();
 	int getNbFaces();
 private:
     int m_nbEdge,m_nbf;
     std::vector<Vector3d> vertexBuf;
-	Edge * find(const Vector3d& v);
 	std::vector<Triangle> m_tri;
-	MeshData * m_data;
+//	MeshData * m_data;
 };
-
-std::ostream& operator<<(std::ostream& os, const Mesh& m);
 
 #endif	/* MESH_H */
 

@@ -4,19 +4,29 @@
 #include <vector>
 #include "Mesh.h"	
 
-Mesh::Mesh():m_nbf(0), m_data(nullptr) {
+Mesh::Mesh():m_nbf(0) {
 }
 Mesh::~Mesh() {
 }
 
 int Mesh::euler() {
-  return vertexBuf.size() - m_nbEdge + m_nbf;
+    return vertexBuf.size() - m_nbEdge + m_nbf;
 }
 
 int Mesh::genre() {
   return 1 - (this->euler() + 1)/2;// 1 - (euler + nb composante_connexe (ici 1) + 0 (surface orientable))/2
 }
 
+void Mesh::printstructure(const std::string& filename) {
+  std::ofstream ofs;
+  ofs.open(filename, std::ofstream::out | std::ofstream::app);
+  for (unsigned long i=0;i < m_tri.size();++i) {
+    ofs << "sommet : "<< m_tri[i].e1->getVertex().getx() << m_tri[i].e1->getVertex().gety() << m_tri[i].e1->getVertex().getz(); 
+    ofs << "| image alpha0 : "<< m_tri[i].e1->alpha0()->getVertex().getx() << m_tri[i].e1->alpha0()->getVertex().gety() << m_tri[i].e1->alpha0()->getVertex().getz();  
+    ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx() << m_tri[i].e1->alpha1()->getVertex().gety() << m_tri[i].e1->alpha1()->getVertex().getz(); 
+    ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx() << m_tri[i].e1->alpha2()->getVertex().gety() << m_tri[i].e1->alpha2()->getVertex().getz(); 
+  }
+}
 int Mesh::load(const std::string& filename){
 	std::ifstream ifs(filename);
 	if(!ifs){
@@ -40,7 +50,7 @@ int Mesh::load(const std::string& filename){
 			}else if(line[0] == 'f'){
 				// f 1 5 4
 				sscanf(line.data(), "%s %d %d %d",const_cast<char*>(head.data()), &s1, &s2, &s3);
-				vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
+				//vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
 				++m_nbf;
 				// Génération d'un triangle
 				Triangle tri;
@@ -97,6 +107,6 @@ int Mesh::getNbFaces() {
 }
 
 int Mesh::getNbVertices() {
-	return m_tri.size();
+	return vertexBuf.size();
 }
 

@@ -69,6 +69,13 @@ public:
      */
 	Edge * alpha2() const;
 	
+    /**
+     * This method return vertices bind
+     * to an Edge
+     * **/
+     Vector3d getVertex() const {
+         return m_vertex;
+     }
 	friend Mesh;
 private:
 	/**

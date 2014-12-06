@@ -40,7 +40,6 @@ int Mesh::load(const std::string& filename){
 			}else if(line[0] == 'f'){
 				// f 1 5 4
 				sscanf(line.data(), "%s %d %d %d",const_cast<char*>(head.data()), &s1, &s2, &s3);
-				vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
 				++m_nbf;
 				// Génération d'un triangle
 				Triangle tri;
@@ -97,6 +96,6 @@ int Mesh::getNbFaces() {
 }
 
 int Mesh::getNbVertices() {
-	return m_tri.size();
+	return vertexBuf.size();
 }
 

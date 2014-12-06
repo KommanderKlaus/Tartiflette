@@ -6,6 +6,9 @@
 #include <vector>
 #include "Edge.h"
 
+#define MESH_LOAD_FAILED 0
+#define MESH_LOADED 1
+
 class Mesh {
 public:
 	Mesh();
@@ -13,6 +16,10 @@ public:
     int genre();
 	int euler();
 	int load(const std::string& filename);
+	
+	int getNbVertices();
+	int getNbEdges();
+	int getNbFaces();
 private:
     int m_nbEdge,m_nbf;
     std::vector<Vector3d> vertexBuf;

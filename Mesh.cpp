@@ -20,7 +20,7 @@ int Mesh::genre() {
 int Mesh::load(const std::string& filename){
 	std::ifstream ifs(filename);
 	if(!ifs){
-		return 1;
+		return MESH_LOAD_FAILED;
 	}
 	
 	//std::vector<Vector3d> vertexBuf;
@@ -47,18 +47,18 @@ int Mesh::load(const std::string& filename){
 				tri.e1 = new Edge(vertexBuf[s1-1]);
 				tri.e2 = new Edge(vertexBuf[s2-1]);
 				tri.e3 = new Edge(vertexBuf[s3-1]);
-				// Mise en place des relations next() et prev()
-				// Dans le triangle
+				// Set up the next() and prev() pointers
+				// in the Triangle
 				tri.e1->connectTo0(tri.e2);
 				tri.e2->connectTo0(tri.e3);
 				tri.e3->connectTo0(tri.e1);
 				m_tri.push_back(tri);
 				++curTriIndex;
-				// Lier les triangles entre eux
+				// Link Triangles
 				for(int i = 0 ; i<curTriIndex; ++i){
 					Triangle  curTri (m_tri[curTriIndex]);
 					Triangle  oldTri  (m_tri[i]); 
-					// test de correspondance des sommets
+					// Matching test
 					if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
 						if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
 							curTri.e1->connectTo2(oldTri.e1);
@@ -84,7 +84,19 @@ int Mesh::load(const std::string& filename){
 		}
 	}
 	ifs.close();
-	m_nbEdge = vertexBuf.size()*1.5;
-    return 0;
+	m_nbEdge = m_tri.size()*3/2;
+    return MESH_LOADED;
+}
+
+int Mesh::getNbEdges() {
+	return m_nbEdge;
+}
+
+int Mesh::getNbFaces() {
+	return m_nbf;
+}
+
+int Mesh::getNbVertices() {
+	return m_tri.size();
 }
 

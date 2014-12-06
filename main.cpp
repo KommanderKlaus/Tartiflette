@@ -3,23 +3,36 @@
 
 using namespace std;
 
-int main(int , char**) {
-	//**********************************************************************************************
+int main(int argc, char** argv) {
+	int returnCode = 0;
+	std::string filename(argv[1]);
+	if(argc != 2){
+		// Wrong command-line.
+		std::cout << "USAGE: " << argv[0] << " objfile.obj" << std::endl;
+		returnCode = -1;
+		goto endOfProg;
+	}
+	// An object is passed to the program. Let's process it !
+	std::cout << "Loading mesh " << filename << "...";
+	{Mesh m;
+	if(m.load(argv[1]) != MESH_LOADED){
+		std::cout << "FAILED" << std::endl;;
+		returnCode = -2;
+		goto endOfProg;
+	}
+	std::cout << " loaded." << std::endl;
 	
-	//**********************************************************************************************
-	//**********************************************************************************************
-	// Klaus
+	std::cout << "Vertices: " << m.getNbVertices() << std::endl;
+	std::cout << "Edges:    " << m.getNbEdges() << std::endl;
+	std::cout << "Faces:    " << m.getNbFaces() << std::endl;
 	
-	
-	
-	//**********************************************************************************************
-	Mesh m;
-	m.load("dummy.obj");
-	
-	//**********************************************************************************************
-	// Max
-	
-	//**********************************************************************************************
-	return 0;
+	std::cout << "Evaluating the Euler characteristic of " << filename << "... " << m.euler() << std::endl;
+	std::cout << "Evaluating the genus of " << filename << "... " << m.genre() << std::endl;}
+endOfProg:
+#ifndef WORKAROUND
+	std::cout << "Press any key to quit..." << std::endl;
+	std::cin.ignore();
+#endif
+	return returnCode;
 }
 

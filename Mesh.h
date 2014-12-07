@@ -22,7 +22,7 @@ public:
 	int getNbFaces();
 private:
     int m_nbEdge,m_nbf;
-    std::vector<Vector3d> vertexBuf;
+    std::vector<Vector3d> m_vertexBuf;
 	std::vector<Triangle> m_tri;
 };
 

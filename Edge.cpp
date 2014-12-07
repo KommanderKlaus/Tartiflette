@@ -19,7 +19,9 @@ m_vertex(vertex)
 
 Edge::Edge(const Vector3d& vertex):
 m_vertex(vertex){
-	memset(m_neighbor, 0, sizeof(m_neighbor));
+	m_neighbor[0] = nullptr;
+	m_neighbor[1] = nullptr;
+	m_neighbor[2] = nullptr;
 }
 
 Edge& Edge::operator=(const Edge& o) {
@@ -70,12 +72,6 @@ e3(_e3){
 	e2->connectTo0(e3);
 	e3->connectTo0(e1);
 }
-
-Triangle::Triangle(const Triangle& tr):
-e1(tr.e1),
-e2(tr.e2),
-e3(tr.e3)
-{}
 
 Triangle::Triangle (Triangle&& tr):
 e1(std::move(tr.e1)),

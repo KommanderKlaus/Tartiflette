@@ -18,27 +18,27 @@ int main(int argc, char** argv) {
 		returnProc();
 		return -1;
 	}    
-	filename.assign(argv[1]);
+	filename = argv[1];
 	// An object is passed to the program. Let's process it !
 	std::cout << "Loading mesh " << filename << "...";
-	{
-		Mesh m;
-    	if(m.load(filename) != MESH_LOADED){
-	    	std::cout << "FAILED" << std::endl;
-			returnProc();
-			return -2;
-    	}
-    	std::cout << " loaded." << std::endl;
-	
-    	std::cout << "Vertices: " << m.getNbVertices() << std::endl;
-    	std::cout << "Edges:    " << m.getNbEdges() << std::endl;
-    	std::cout << "Faces:    " << m.getNbFaces() << std::endl;
-	
-    	std::cout << "Evaluating the Euler characteristic of " << filename << "... " << m.euler() << std::endl;
-    	std::cout << "Evaluating the genus of " << filename << "... " << m.genre() << std::endl;
-        m.printstructure("test.txt");
-    	std::cout << "plop" << std::endl;
-    }
+	Mesh m;
+	if(m.load(filename) != MESH_LOADED){
+		std::cout << "FAILED" << std::endl;
+		returnProc();
+		return -2;
+	}
+	std::cout << " loaded." << std::endl;
+
+	std::cout << "Vertices: " << m.getNbVertices() << std::endl;
+	std::cout << "Edges:    " << m.getNbEdges() << std::endl;
+	std::cout << "Faces:    " << m.getNbFaces() << std::endl;
+
+	std::cout << "Evaluating the Euler characteristic of " << filename << "... " << m.euler() << std::endl;
+	std::cout << "Evaluating the genus of " << filename << "... " << m.genre() << std::endl;
+	// Formatting the ouput file
+	std::string outFile = filename.substr(0, filename.find(".obj")) + ".topo";
+	m.printstructure(outFile);
+	returnProc();
 	return 0;
 }
 

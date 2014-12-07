@@ -115,7 +115,7 @@ struct Triangle{
 	Edge * e3;
 	Triangle ();
 	Triangle (Edge * _e1, Edge * _e2, Edge * _e3);
-	Triangle (const Triangle &tr);
+	Triangle (const Triangle &tr) = delete;
 	Triangle (Triangle&& tr);
 	~Triangle();
 	Triangle& operator=(const Triangle& o);

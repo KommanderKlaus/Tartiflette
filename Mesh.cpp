@@ -29,21 +29,23 @@ void Mesh::printstructure(const std::string& filename) {
   Edge* current = m_tri[0].e1;
   Edge* following = current;
   Edge* temp = current;  
+  int i=0;
   do {
     do {  
 		following->IsVisited(true);
+		i++;
 		ofs << "sommet : "<< following->getVertex().getx()<< " " << following->getVertex().gety()<< " " << following->getVertex().getz(); 
 		ofs << "| image alpha0 : "<< following->alpha0()->getVertex().getx() << " "<< following->alpha0()->getVertex().gety()<<" " << following->alpha0()->getVertex().getz();  
 		ofs << "| image alpha1 : "<< following->alpha1()->getVertex().getx()<< " " << following->alpha1()->getVertex().gety()<< " " << following->alpha1()->getVertex().getz();
 		ofs << "| image alpha2 : "<< following->alpha2()->getVertex().getx()<< " " << following->alpha2()->getVertex().gety()<< " " << following->alpha2()->getVertex().getz()<<std::endl; 
 		following = following->alpha0();
     }while (!(following == temp));
-   while(following->alpha2()->WasVisited()) {
+   while(following->alpha2()->WasVisited() && i != m_nbEdge) {
     following = following->alpha1();
    }
    following=following->alpha2();
    temp=following; 
-  }while (!(following == current));
+  }while (i!= m_nbEdge);
 }
 
 int Mesh::load(const std::string& filename){

@@ -3,7 +3,7 @@
 
 #include "Vector.h"
 
-class Triangle;
+struct Triangle;
 class Mesh;
 
 class Edge {
@@ -77,6 +77,9 @@ public:
 inline Vector3d getVertex() const {
       return this->m_vertex;
 }
+inline Edge* getNeighbor(int i) const {
+      return m_neighbor[i];
+}
 	friend Mesh;
 	friend Triangle;
 private:
@@ -122,6 +125,8 @@ struct Triangle{
 };
 
 typedef Edge MeshData;
+
+bool operator== (Edge& E1, Edge& E2);
 
 #endif	/* EDGE_H */
 

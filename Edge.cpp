@@ -94,3 +94,15 @@ Triangle& Triangle::operator=(const Triangle& o) {
 	this->e1 = o.e3;
 	return *this;
 }
+bool operator== (Edge& E1, Edge& E2) {
+  bool ret = true;
+  if ( E1.getVertex() == E2.getVertex()) {
+	for(int i = 0; i < 3; i++) {
+	   if (E1.getNeighbor(i)!= E2.getNeighbor(i))
+				ret=false;
+	}	
+  } else {
+	  ret = false;
+	}
+  return ret;
+}

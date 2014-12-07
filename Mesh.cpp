@@ -23,31 +23,52 @@ int Mesh::genre() {
   return 1- (this->euler() + 0 + 0)/2;// 1 - (euler + nb composante_connexe du bord (ici 0) + 0 (surface orientable))/2
 }
 
-void Mesh::printstructure(const std::string& filename) {
+int Mesh::printstructure(const std::string& filename) {
   std::ofstream ofs;
   ofs.open(filename, std::ofstream::out );
-  Edge* following = m_tri[0].e1;
-  Edge* temp = following;  
-  int i=0;
-  do {
-    do {  
-		following->IsVisited(true);
-		i++;
-		ofs << "Edge : "<< following->getVertex().getx()<< " " << following->getVertex().gety()<< " " << following->getVertex().getz(); 
-		ofs << "| image par alpha0 : "<< following->alpha0()->getVertex().getx() << " "<< following->alpha0()->getVertex().gety()<<" " << following->alpha0()->getVertex().getz();  
-		ofs << "| image par alpha1 : "<< following->alpha1()->getVertex().getx()<< " " << following->alpha1()->getVertex().gety()<< " " << following->alpha1()->getVertex().getz();
-		ofs << "| image par alpha2 : "<< following->alpha2()->getVertex().getx()<< " " << following->alpha2()->getVertex().gety()<< " " << following->alpha2()->getVertex().getz()<<std::endl; 
-		following = following->alpha0();
-    }while (!(following == temp));
-   while(following->alpha2()->WasVisited() && i != m_nbEdge) {
-    following = following->alpha1();
-   }
-   following=following->alpha2();
-   temp=following; 
-  }while (i!= m_nbEdge);
+  Edge* E1 = m_tri[0].e1;
+ // Edge* temp = following;  
+	int i =0;
+	for(;i<3;i++) {
+		E1->IsVisited(true);
+		ofs << "Edge : "<< E1->getVertex().getx()<< " " << E1->getVertex().gety()<< " " << E1->getVertex().getz(); 
+	}
+	if(E1->alpha2()->WasVisited() && E1->alpha0()->alpha2()->WasVisited() && E1->alpha0()->alpha0()->alpha2()->WasVisited()) {
+		return 0;
+	} 
+	 if (!E1->alpha2()->WasVisited()) {
+		printstructure(filename,E1->alpha2());
+	 } 
+	 if (!E1->alpha0()->alpha2()->WasVisited()) {
+		 printstructure(filename,E1->alpha0()->alpha2());
+	 }
+	 if (!E1->alpha0()->alpha0()->alpha2()->WasVisited()) {
+		 printstructure(filename,E1->alpha0()->alpha0()->alpha2());
+	 }
 }
-
-int Mesh::load(const std::string& filename){
+int Mesh::printstructure(const std::string& filename, Edge* E1) 
+{
+	std::ofstream ofs;
+    ofs.open(filename, std::ofstream::out );
+	int i =0;
+	for(;i<3;i++) {
+		E1->IsVisited(true);
+		ofs << "Edge : "<< E1->getVertex().getx()<< " " << E1->getVertex().gety()<< " " << E1->getVertex().getz(); 
+	}
+	if(E1->alpha2()->WasVisited() && E1->alpha0()->alpha2()->WasVisited() && E1->alpha0()->alpha0()->alpha2()->WasVisited()) {
+		return 0;
+	} 
+	 if (!E1->alpha2()->WasVisited()) {
+		printstructure(filename,E1->alpha2());
+	 } 
+	 if (!E1->alpha0()->alpha2()->WasVisited()) {
+		 printstructure(filename,E1->alpha0()->alpha2());
+	 }
+	 if (!E1->alpha0()->alpha0()->alpha2()->WasVisited()) {
+		 printstructure(filename,E1->alpha0()->alpha0()->alpha2());
+	 }
+}
+int Mesh::load(const std::string& filename) {
 	std::ifstream ifs(filename);
 	if(!ifs){
 		return MESH_LOAD_FAILED;

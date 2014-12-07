@@ -16,11 +16,12 @@ public:
     int genre();
 	int euler();
 	int load(const std::string& filename);
-    void printstructure(const std::string& filename);	
+    int printstructure(const std::string& filename);	
 	int getNbVertices();
 	int getNbEdges();
 	int getNbFaces();
 private:
+    int printstructure(const std::string& filename, Edge* E1);
     int m_nbEdge,m_nbf;
     std::vector<Vector3d> m_vertexBuf;
 	std::vector<Triangle> m_tri;

@@ -5,12 +5,12 @@
 #include <stdio.h>
 
 Edge::Edge():
-m_vertex(0.0f, 0.0f, 0.0f){
+m_pVertex(nullptr){
 	memset(m_neighbor, 0, sizeof(m_neighbor));
 }
 
 Edge::Edge(const Vector3d& vertex, Edge * a0, Edge * a1, Edge * a2):
-m_vertex(vertex)
+m_pVertex(&vertex)
 {
 	m_neighbor[0] = a0;
 	m_neighbor[1] = a1;
@@ -18,14 +18,14 @@ m_vertex(vertex)
 }
 
 Edge::Edge(const Vector3d& vertex):
-m_vertex(vertex){
+m_pVertex(&vertex){
 	m_neighbor[0] = nullptr;
 	m_neighbor[1] = nullptr;
 	m_neighbor[2] = nullptr;
 }
 
 Edge& Edge::operator=(const Edge& o) {
-	this->m_vertex = o.m_vertex;
+	this->m_pVertex = o.m_pVertex;
 	memcpy(m_neighbor, o.m_neighbor, sizeof(m_neighbor));
     return *this;
 }

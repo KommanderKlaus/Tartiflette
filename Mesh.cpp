@@ -3,6 +3,7 @@
 #include <sstream>
 #include <list>
 #include <vector>
+#include <cmath>
 #include "Mesh.h"	
 
 Mesh::Mesh():
@@ -19,19 +20,18 @@ int Mesh::euler() {
 }
 
 int Mesh::genre() {
-  return 1 - (this->euler() + 1)/2;// 1 - (euler + nb composante_connexe (ici 1) + 0 (surface orientable))/2
+  return 1- (this->euler() + 0 + 0)/2;// 1 - (euler + nb composante_connexe du bord (ici 0) + 0 (surface orientable))/2
 }
 
 void Mesh::printstructure(const std::string& filename) {
-	std::ofstream ofs;
-	ofs.open(filename, std::ofstream::out | std::ofstream::app);
-	for (unsigned long i=0;i < m_tri.size();++i) {
-		ofs << "sommet : "<< m_tri[i].e1->getVertex().getx() << m_tri[i].e1->getVertex().gety() << m_tri[i].e1->getVertex().getz();
-		ofs << "| image alpha0 : "<< m_tri[i].e1->alpha0()->getVertex().getx() << m_tri[i].e1->alpha0()->getVertex().gety() << m_tri[i].e1->alpha0()->getVertex().getz();
-		ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx() << m_tri[i].e1->alpha1()->getVertex().gety() << m_tri[i].e1->alpha1()->getVertex().getz();
-		ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx() << m_tri[i].e1->alpha2()->getVertex().gety() << m_tri[i].e1->alpha2()->getVertex().getz();
-	}
-	ofs.close();
+  std::ofstream ofs;
+  ofs.open(filename, std::ofstream::out | std::ofstream::app);
+  for (unsigned long i=0;i < m_tri.size();i++) {
+    ofs << "sommet : "<< m_tri[i].e1->getVertex().getx() << m_tri[i].e1->getVertex().gety() << m_tri[i].e1->getVertex().getz(); 
+    ofs << "| image alpha0 : "<< m_tri[i].e1->alpha0()->getVertex().getx() << m_tri[i].e1->alpha0()->getVertex().gety() << m_tri[i].e1->alpha0()->getVertex().getz();  
+    ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx() << m_tri[i].e1->alpha1()->getVertex().gety() << m_tri[i].e1->alpha1()->getVertex().getz();
+    ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx() << m_tri[i].e1->alpha2()->getVertex().gety() << m_tri[i].e1->alpha2()->getVertex().getz()<<std::endl; 
+  }
 }
 
 int Mesh::load(const std::string& filename){
@@ -51,12 +51,15 @@ int Mesh::load(const std::string& filename){
 			continue;
 		}
 		if(line[0] == 'v'){
+			// v 0.5 4.7 8.5
 			sscanf(line.data(), "%s %f %f %f",const_cast<char*>(head.data()), &x, &y, &z);
-			m_vertexBuf.emplace_back(x, y, z);
+			m_vertexBuf.emplace(m_vertexBuf.end(), x, y, z);
 		}else if(line[0] == 'f'){
+			// f 1 5 4
 			sscanf(line.data(), "%s %d %d %d",const_cast<char*>(head.data()), &s1, &s2, &s3);
+			//vertexBuf.emplace(vertexBuf.end(), s1, s2, s3);
 			++m_nbf;
-			// Generate one triangle
+			// Génération d'un triangle
 			m_tri.emplace_back(	new Edge(m_vertexBuf[s1-1]),
 								new Edge(m_vertexBuf[s2-1]),
 								new Edge(m_vertexBuf[s3-1]));
@@ -66,25 +69,28 @@ int Mesh::load(const std::string& filename){
 				Triangle& curTri (m_tri[curTriIndex]);
 				Triangle& oldTri  (m_tri[i]); 
 				// Matching test
-				if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
-					if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
-						curTri.e1->connectTo2(oldTri.e1);
-						oldTri.e1->connectTo2(curTri.e1);
-					}
+				if(curTri.e1->getVertex() == oldTri.e1->getVertex()){
+					curTri.e1->connectTo2(oldTri.e1);
+				}else if(curTri.e1->getVertex() == oldTri.e2->getVertex()){
+					curTri.e1->connectTo2(oldTri.e2);
+				}else if(curTri.e1->getVertex() == oldTri.e3->getVertex()){
+					curTri.e1->connectTo2(oldTri.e3);
 				}
-
-				if( (curTri.e2)->m_vertex == (oldTri.e2)->m_vertex){
-					if(curTri.e2->alpha0() == oldTri.e2->alpha1()){
-						curTri.e2->connectTo2(oldTri.e2);
-						oldTri.e2->connectTo2(curTri.e2);
-					}
+				
+				if(curTri.e2->getVertex() == oldTri.e1->getVertex()){
+					curTri.e2->connectTo2(oldTri.e1);
+				}else if(curTri.e2->getVertex() == oldTri.e2->getVertex()){
+					curTri.e2->connectTo2(oldTri.e2);
+				}else if(curTri.e2->getVertex() == oldTri.e3->getVertex()){
+					curTri.e2->connectTo2(oldTri.e3);
 				}
-
-				if(curTri.e3->m_vertex == oldTri.e3->m_vertex){
-					if(curTri.e3->alpha0() == oldTri.e3->alpha1()){
-						curTri.e3->connectTo2(oldTri.e3);
-						oldTri.e3->connectTo2(curTri.e3);
-					}
+				
+				if(curTri.e3->getVertex() == oldTri.e1->getVertex()){
+					curTri.e3->connectTo2(oldTri.e1);
+				}else if(curTri.e3->getVertex() == oldTri.e2->getVertex()){
+					curTri.e3->connectTo2(oldTri.e2);
+				}else if(curTri.e3->getVertex() == oldTri.e3->getVertex()){
+					curTri.e3->connectTo2(oldTri.e3);
 				}
 			}
 		}else{

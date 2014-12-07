@@ -74,9 +74,9 @@ public:
      * This method return vertices bind
      * to an Edge
      * **/
-     Vector3d getVertex() const {
-         return m_vertex;
-     }
+inline Vector3d getVertex() const {
+      return this->m_vertex;
+}
 	friend Mesh;
 	friend Triangle;
 private:

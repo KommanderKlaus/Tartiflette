@@ -45,17 +45,17 @@ Edge* Edge::alpha2() const{
 
 void Edge::connectTo0(Edge* a0) {
 	this->m_neighbor[0] = a0;	// Next of *this set to a0
-	a0->  m_neighbor[1] = this;	// Previous of a0 set to *this
+	a0->m_neighbor[1] = this;	// Previous of a0 set to *this
 }
 
 void Edge::connectTo1(Edge* a1) {
 	this->m_neighbor[1] = a1;// Previous of *this set to a0
-	a1->  m_neighbor[0] = this;	// Next of a0 set to *this
+	a1->m_neighbor[0] = this;	// Next of a0 set to *this
 }
 
 void Edge::connectTo2(Edge* a2) {
 	this->m_neighbor[2] = a2;// Opposite of *this set to a0
-	a2->  m_neighbor[2] = this;	// Opposite of a0 set to *this
+	a2->m_neighbor[2] = this;	// Opposite of a0 set to *this
 }
 
 Triangle::Triangle():

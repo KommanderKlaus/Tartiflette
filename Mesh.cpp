@@ -2,6 +2,7 @@
 #include <fstream>
 #include <list>
 #include <vector>
+#include <cmath>
 #include "Mesh.h"	
 
 Mesh::Mesh():m_nbf(0) {
@@ -14,17 +15,17 @@ int Mesh::euler() {
 }
 
 int Mesh::genre() {
-  return 1 - (this->euler() + 1)/2;// 1 - (euler + nb composante_connexe (ici 1) + 0 (surface orientable))/2
+  return 1- (this->euler() + 0 + 0)/2;// 1 - (euler + nb composante_connexe du bord (ici 0) + 0 (surface orientable))/2
 }
 
 void Mesh::printstructure(const std::string& filename) {
   std::ofstream ofs;
   ofs.open(filename, std::ofstream::out | std::ofstream::app);
-  for (unsigned long i=0;i < m_tri.size();++i) {
+  for (unsigned long i=0;i < m_tri.size();i++) {
     ofs << "sommet : "<< m_tri[i].e1->getVertex().getx() << m_tri[i].e1->getVertex().gety() << m_tri[i].e1->getVertex().getz(); 
     ofs << "| image alpha0 : "<< m_tri[i].e1->alpha0()->getVertex().getx() << m_tri[i].e1->alpha0()->getVertex().gety() << m_tri[i].e1->alpha0()->getVertex().getz();  
-    ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx() << m_tri[i].e1->alpha1()->getVertex().gety() << m_tri[i].e1->alpha1()->getVertex().getz()<<std::endl; 
-   // ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx() << m_tri[i].e1->alpha2()->getVertex().gety() << m_tri[i].e1->alpha2()->getVertex().getz()<<std::endl; 
+    ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx() << m_tri[i].e1->alpha1()->getVertex().gety() << m_tri[i].e1->alpha1()->getVertex().getz();
+    ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx() << m_tri[i].e1->alpha2()->getVertex().gety() << m_tri[i].e1->alpha2()->getVertex().getz()<<std::endl; 
   }
 }
 int Mesh::load(const std::string& filename){
@@ -70,24 +71,24 @@ int Mesh::load(const std::string& filename){
 					Triangle  oldTri  (m_tri[i]); 
 					// Matching test
 					if( (curTri.e1)->m_vertex == (oldTri.e1)->m_vertex){
-						if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
+					//	if( (curTri.e1)->alpha0() == (oldTri.e1)->alpha1()){
 							curTri.e1->connectTo2(oldTri.e1);
-							oldTri.e1->connectTo2(curTri.e1);
-						}
+						//	oldTri.e1->connectTo2(curTri.e1);
+					//	}
 					}
 					
 					if( (curTri.e2)->m_vertex == (oldTri.e2)->m_vertex){
-						if(curTri.e2->alpha0() == oldTri.e2->alpha1()){
+					//	if(curTri.e2->alpha0() == oldTri.e2->alpha1()){
 							curTri.e2->connectTo2(oldTri.e2);
-							oldTri.e2->connectTo2(curTri.e2);
-						}
+						//	oldTri.e2->connectTo2(curTri.e2);
+					//	}
 					}
 					
 					if(curTri.e3->m_vertex == oldTri.e3->m_vertex){
-						if(curTri.e3->alpha0() == oldTri.e3->alpha1()){
+					//	if(curTri.e3->alpha0() == oldTri.e3->alpha1()){
 							curTri.e3->connectTo2(oldTri.e3);
-							oldTri.e3->connectTo2(curTri.e3);
-						}
+						//	oldTri.e3->connectTo2(curTri.e3);
+					//	}
 					}
 				}
 			}

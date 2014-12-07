@@ -1,6 +1,7 @@
 #ifndef EDGE_H
 #define	EDGE_H
 
+#include <exception>
 #include "Vector.h"
 
 struct Triangle;
@@ -75,7 +76,8 @@ public:
      * to an Edge
      * **/
 inline Vector3d getVertex() const {
-      return this->m_vertex;
+	if(!m_pVertex) throw std::exception();
+    return *(this->m_pVertex);
 }
 inline Edge* getNeighbor(int i) const {
       return m_neighbor[i];
@@ -104,7 +106,7 @@ private:
 	/**
 	 * This is the vertex associated to the edge
 	 */
-	Vector3d m_vertex;
+	const Vector3d * m_pVertex;
 	
 	/**
 	 * This is the three neighbors of the current Edge

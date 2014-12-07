@@ -47,7 +47,7 @@ int Mesh::load(const std::string& filename){
 	int curTriIndex = -1;
 	
 	while(getline(ifs, line)){
-		if(line[0] == '#' && line[0] == 'o' && line[0] == 's'){
+		if(line[0] == '#' || line[0] == 'o' || line[0] == 's'){
 			continue;
 		}
 		if(line[0] == 'v'){

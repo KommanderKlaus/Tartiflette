@@ -6,12 +6,14 @@
 
 Edge::Edge():
 m_pVertex(nullptr){
+	visited = false;
 	memset(m_neighbor, 0, sizeof(m_neighbor));
 }
 
 Edge::Edge(const Vector3d& vertex, Edge * a0, Edge * a1, Edge * a2):
 m_pVertex(&vertex)
 {
+	visited = false;
 	m_neighbor[0] = a0;
 	m_neighbor[1] = a1;
 	m_neighbor[2] = a2;
@@ -19,6 +21,7 @@ m_pVertex(&vertex)
 
 Edge::Edge(const Vector3d& vertex):
 m_pVertex(&vertex){
+	visited=false;
 	m_neighbor[0] = nullptr;
 	m_neighbor[1] = nullptr;
 	m_neighbor[2] = nullptr;

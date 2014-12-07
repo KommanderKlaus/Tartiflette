@@ -82,6 +82,12 @@ inline Vector3d getVertex() const {
 inline Edge* getNeighbor(int i) const {
       return m_neighbor[i];
 }
+inline bool WasVisited() const {
+     return visited;
+}
+inline void IsVisited(bool b)  {
+	 visited=b;
+}
 	friend Mesh;
 	friend Triangle;
 private:
@@ -112,6 +118,10 @@ private:
 	 * This is the three neighbors of the current Edge
 	 */
 	Edge * m_neighbor[3];
+	/**
+	 * 
+	 * */
+	 bool visited;
 };
 
 struct Triangle{

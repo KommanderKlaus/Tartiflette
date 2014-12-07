@@ -26,26 +26,24 @@ int Mesh::genre() {
 void Mesh::printstructure(const std::string& filename) {
   std::ofstream ofs;
   ofs.open(filename, std::ofstream::out );
-  //~ for (unsigned long i=0;i < m_tri.size();i++) {
-    //~ ofs << "sommet : "<< m_tri[i].e1->getVertex().getx()<< " " << m_tri[i].e1->getVertex().gety()<< " " << m_tri[i].e1->getVertex().getz(); 
-    //~ ofs << "| image alpha0 : "<< m_tri[i].e1->alpha0()->getVertex().getx() << " "<< m_tri[i].e1->alpha0()->getVertex().gety()<<" " << m_tri[i].e1->alpha0()->getVertex().getz();  
-    //~ ofs << "| image alpha1 : "<< m_tri[i].e1->alpha1()->getVertex().getx()<< " " << m_tri[i].e1->alpha1()->getVertex().gety()<< " " << m_tri[i].e1->alpha1()->getVertex().getz();
-    //~ ofs << "| image alpha2 : "<< m_tri[i].e1->alpha2()->getVertex().getx()<< " " << m_tri[i].e1->alpha2()->getVertex().gety()<< " " << m_tri[i].e1->alpha2()->getVertex().getz()<<std::endl; 
-  //~ }
   Edge* current = m_tri[0].e1;
   Edge* following = current;
   Edge* temp = current;  
   do {
     do {  
-	ofs << "sommet : "<< following->getVertex().getx()<< " " << following->getVertex().gety()<< " " << following->getVertex().getz(); 
-    ofs << "| image alpha0 : "<< following->alpha0()->getVertex().getx() << " "<< following->alpha0()->getVertex().gety()<<" " << following->alpha0()->getVertex().getz();  
-    ofs << "| image alpha1 : "<< following->alpha1()->getVertex().getx()<< " " << following->alpha1()->getVertex().gety()<< " " << following->alpha1()->getVertex().getz();
-    ofs << "| image alpha2 : "<< following->alpha2()->getVertex().getx()<< " " << following->alpha2()->getVertex().gety()<< " " << following->alpha2()->getVertex().getz()<<std::endl; 
-    following = following->alpha0();
-    }while (following != temp);
-    following = following->alpha2();
-    temp=following;
-  }while (following != current);
+		following->IsVisited(true);
+		ofs << "sommet : "<< following->getVertex().getx()<< " " << following->getVertex().gety()<< " " << following->getVertex().getz(); 
+		ofs << "| image alpha0 : "<< following->alpha0()->getVertex().getx() << " "<< following->alpha0()->getVertex().gety()<<" " << following->alpha0()->getVertex().getz();  
+		ofs << "| image alpha1 : "<< following->alpha1()->getVertex().getx()<< " " << following->alpha1()->getVertex().gety()<< " " << following->alpha1()->getVertex().getz();
+		ofs << "| image alpha2 : "<< following->alpha2()->getVertex().getx()<< " " << following->alpha2()->getVertex().gety()<< " " << following->alpha2()->getVertex().getz()<<std::endl; 
+		following = following->alpha0();
+    }while (!(following == temp));
+   while(following->alpha2()->WasVisited()) {
+    following = following->alpha1();
+   }
+   following=following->alpha2();
+   temp=following; 
+  }while (!(following == current));
 }
 
 int Mesh::load(const std::string& filename){
